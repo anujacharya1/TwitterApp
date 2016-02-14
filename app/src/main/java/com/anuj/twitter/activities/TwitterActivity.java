@@ -1,7 +1,9 @@
-package twitter.anuj.com.twitterapp;
+package com.anuj.twitter.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.anuj.twitter.R;
 
 public class TwitterActivity extends AppCompatActivity {
 
