@@ -20,7 +20,7 @@ public class TwitterActivity extends AppCompatActivity {
 
         setSupportActionBar(twitterToolBar);
 
-        twitterToolBar.setLogo(R.drawable.twitter_logo);
+//        twitterToolBar.setLogo(R.drawable.twitter_logo);
         twitterToolBar.setBackgroundColor(getResources().getColor(R.color.blue));
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
