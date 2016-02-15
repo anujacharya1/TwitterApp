@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TwitterApp</string>
+    <string name="login_label">Log in</string>
+    <string name="tweetTxt">tweetTxt</string>
 </resources>
