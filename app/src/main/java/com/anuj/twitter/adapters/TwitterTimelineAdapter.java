@@ -47,9 +47,7 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         Timeline contact = timelineList.get(position);
-
         TextView tweetTxt = holder.tweetTxt;
-
 
     }
 

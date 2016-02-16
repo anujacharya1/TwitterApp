@@ -10,18 +10,50 @@
         android:id="@+id/usrImg"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="#46d080" />
+
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tweetTxt"
-        android:id="@+id/tweetTextView"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="match_parent"
+        android:text="tweet"
+        android:id="@+id/tvTweet"
+        android:layout_toRightOf="@+id/usrImg"
+        android:layout_alignBottom="@+id/usrImg"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvUsername"
+        android:background="#b74d4d" />
+
+
+
+    <TextView
+        android:padding="5dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="username"
+        android:id="@+id/tvUsername"
         android:layout_alignParentTop="true"
+        android:background="#d09868"
         android:layout_toRightOf="@+id/usrImg"
-        android:layout_toEndOf="@+id/usrImg"
-        android:layout_alignBottom="@+id/usrImg" />
+
+        />
+
+    <TextView
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="date"
+        android:id="@+id/tvDate"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/tvTweet"
+        android:gravity="end"
+        android:layout_toRightOf="@+id/tvUsername"
+        android:layout_toEndOf="@+id/tvUsername"
+        android:background="#b286cf" />
 
 </RelativeLayout>
