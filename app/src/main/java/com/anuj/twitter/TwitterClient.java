@@ -1,6 +1,7 @@
 package com.anuj.twitter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -42,7 +43,10 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("since_id", 1);
 		params.put("count", 25);
-		getClient().get(apiUrl, params, handler);
+		Log.i("INFO", "apiUrl==" + apiUrl);
+		Log.i("INFO", "params==" + params);
+		Log.i("INFO", "access_token==" + getClient().getAccessToken().getToken());
+		getClient().post(apiUrl, params, handler);
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
