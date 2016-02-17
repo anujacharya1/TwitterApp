@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.anuj.twitter.R;
 import com.anuj.twitter.models.Timeline;
+import com.anuj.twitter.models.User;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -46,8 +48,16 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Timeline contact = timelineList.get(position);
-        TextView tweetTxt = holder.tweetTxt;
+        Timeline timeline = timelineList.get(position);
+        User user = timeline.getUser();
+
+        holder.tweetTxt.setText(timeline.getText());
+        holder.username.setText(user.getName());
+        holder.date.setText(timeline.getCreatedAt());
+
+        Glide.with(context)
+                .load(user.getProfileImg())
+                .into(holder.userTweetImg);
 
     }
 
@@ -74,8 +84,12 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
 
         @Bind(R.id.usrImg)
         public ImageView userTweetImg;
-        @Bind(R.id.tweetTextView)
+        @Bind(R.id.tvTweet)
         public TextView tweetTxt;
+        @Bind(R.id.tvDate)
+        TextView date;
+        @Bind(R.id.tvUsername)
+        TextView username;
 
         public ViewHolder(final View itemView) {
             super(itemView);

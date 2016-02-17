@@ -46,7 +46,7 @@ public class TwitterClient extends OAuthBaseClient {
 		Log.i("INFO", "apiUrl==" + apiUrl);
 		Log.i("INFO", "params==" + params);
 		Log.i("INFO", "access_token==" + getClient().getAccessToken().getToken());
-		getClient().post(apiUrl, params, handler);
+		getClient().get(apiUrl, params, handler);
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
