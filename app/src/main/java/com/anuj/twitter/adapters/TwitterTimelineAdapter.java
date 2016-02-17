@@ -1,7 +1,11 @@
 package com.anuj.twitter.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,9 @@ import com.anuj.twitter.models.Timeline;
 import com.anuj.twitter.models.User;
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -26,6 +33,7 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
     List<Timeline> timelineList;
     private Context context;
 
+    static final String TWITTER_TIME_FORMAT="EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
     public TwitterTimelineAdapter(List<Timeline> timelineList) {
         this.timelineList = timelineList;
@@ -40,8 +48,6 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
         View v1 = inflater.inflate(R.layout.layout_timeline, parent, false);
         viewHolder = new ViewHolder(v1);
 
-        viewHolder.tweetTxt.setText("ANUJ");
-
         return viewHolder;
     }
 
@@ -53,12 +59,49 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
 
         holder.tweetTxt.setText(timeline.getText());
         holder.username.setText(user.getName());
-        holder.date.setText(timeline.getCreatedAt());
+
+        Date createdAt = getTwitterDate(timeline.getCreatedAt());
+        //date
+        long now = System.currentTimeMillis();
+
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(createdAt);
+        long time = c.getTimeInMillis();
+
+
+        CharSequence timeFormated =  DateUtils.getRelativeTimeSpanString(
+                time, now,
+                DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_NO_NOON);
+//
+//        Drawable dr = getContext().getResources().getDrawable(R.drawable.clock);
+//        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+//        Drawable d = new BitmapDrawable(getContext().getResources(), Bitmap.createScaledBitmap(bitmap, 50, 50, true));
+
+//        holder.date.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
+        holder.date.setText(timeFormated.toString());
+        holder.date.setTextSize(10.0f);
+
 
         Glide.with(context)
                 .load(user.getProfileImg())
-                .into(holder.userTweetImg);
+                .override(50, 50)
+                .into(holder.userTweetImg)
+                ;
 
+    }
+
+    public static Date getTwitterDate(String date) {
+//Thu Dec 23 18:26:07 +0000 2010
+        SimpleDateFormat sf = new SimpleDateFormat(TWITTER_TIME_FORMAT);
+        sf.setLenient(true);
+        Date twitterDate = null;
+        try {
+            twitterDate = sf.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return twitterDate;
     }
 
     @Override
