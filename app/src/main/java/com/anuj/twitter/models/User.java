@@ -12,6 +12,17 @@ public class User {
     @SerializedName("profile_image_url")
     String profileImg;
 
+    @SerializedName("screen_name")
+    private String screenName;
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
     public String getName() {
         return name;
     }
@@ -33,6 +44,7 @@ public class User {
         return "User{" +
                 "name='" + name + '\'' +
                 ", profileImg='" + profileImg + '\'' +
+                ", screenName='" + screenName + '\'' +
                 '}';
     }
 }

@@ -5,19 +5,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by anujacharya on 2/13/16.
  */
-
 
 public class Timeline {
 
@@ -29,6 +24,15 @@ public class Timeline {
     @SerializedName("created_at")
     private String createdAt;
 
+    private String wholeResponse;
+
+    public String getWholeResponse() {
+        return wholeResponse;
+    }
+
+    public void setWholeResponse(String wholeResponse) {
+        this.wholeResponse = wholeResponse;
+    }
 
     public User getUser() {
         return user;
@@ -66,6 +70,7 @@ public class Timeline {
                 String timelineStr = timelinesJsonArray.getJSONObject(i).toString();
                 JsonObject timelineObj = parser.parse(timelineStr).getAsJsonObject();
                 Timeline timeline =  gson.fromJson(timelineObj, Timeline.class);
+                timeline.setWholeResponse(timelineStr);
                 timeLines.add(timeline);
             }
 

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,35 +58,35 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
         Timeline timeline = timelineList.get(position);
         User user = timeline.getUser();
 
+        //tweet
         holder.tweetTxt.setText(timeline.getText());
-        holder.username.setText(user.getName());
 
-        Date createdAt = getTwitterDate(timeline.getCreatedAt());
         //date
+        Date createdAt = getTwitterDate(timeline.getCreatedAt());
         long now = System.currentTimeMillis();
-
 
         Calendar c = Calendar.getInstance();
         c.setTime(createdAt);
         long time = c.getTimeInMillis();
 
-
         CharSequence timeFormated =  DateUtils.getRelativeTimeSpanString(
                 time, now,
                 DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_NO_NOON);
-//
-//        Drawable dr = getContext().getResources().getDrawable(R.drawable.clock);
-//        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-//        Drawable d = new BitmapDrawable(getContext().getResources(), Bitmap.createScaledBitmap(bitmap, 50, 50, true));
 
-//        holder.date.setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
         holder.date.setText(timeFormated.toString());
         holder.date.setTextSize(10.0f);
 
+        //username
+        holder.username.setText(user.getName());
+        holder.username.setText(Html.fromHtml("<b><font size='1' color='#000000'>"
+                + user.getName() + "</font></b>"));
+        holder.username.append(" ");
+        holder.username.append(Html.fromHtml("<font size='0.2' color='#9E9E9E'>" +
+                "@" + user.getScreenName() + "</font>"));
 
+        //profile image
         Glide.with(context)
                 .load(user.getProfileImg())
-                .override(50, 50)
                 .into(holder.userTweetImg)
                 ;
 
