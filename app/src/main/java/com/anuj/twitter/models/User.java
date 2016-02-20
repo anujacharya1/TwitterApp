@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class User {
 
+    Long id;
+
     String name;
 
     @SerializedName("profile_image_url")
@@ -39,9 +41,18 @@ public class User {
         this.profileImg = profileImg;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "User{" +
+                "id='" + id + '\'' +
                 "name='" + name + '\'' +
                 ", profileImg='" + profileImg + '\'' +
                 ", screenName='" + screenName + '\'' +

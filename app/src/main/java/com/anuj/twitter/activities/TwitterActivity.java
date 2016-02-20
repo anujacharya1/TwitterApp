@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
 import com.anuj.twitter.R;
 import com.anuj.twitter.TwitterApplication;
 import com.anuj.twitter.TwitterClient;
@@ -262,13 +263,28 @@ public class TwitterActivity extends AppCompatActivity {
     }
 
     private void saveToDB(List<Timeline> timelines){
+        ActiveAndroid.beginTransaction();
+        try{
+            for(Timeline timeline :  timelines){
 
-        for(Timeline timeline :  timelines){
-//
-//            User user = timeline.getUser();
-//            UserDO userDO = new UserDO(user.getName(), user.getProfileImg(), user.getScreenName());
-//            TimelineDO timelineDO = new TimelineDO(userDO, timeline.getText(), timeline.getCreatedAt());
-//            timelineDO.save();
+                User user = timeline.getUser();
+                UserDO userDO = new UserDO(user.getId(), user.getName(), user.getProfileImg(),user.getScreenName() );
+                userDO.save();
+
+                TimelineDO timelineDO = new TimelineDO(timeline.getId(), userDO, timeline.getText(), timeline.getCreatedAt() );
+                timelineDO.save();
+                Log.i("INFO", "Getting random tweet = " + TimelineDO.getRandom());
+            }
+            ActiveAndroid.setTransactionSuccessful();
         }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
+        finally {
+
+            ActiveAndroid.endTransaction();
+        }
+
     }
 }
