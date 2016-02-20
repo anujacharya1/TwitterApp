@@ -1,5 +1,7 @@
 package com.anuj.twitter.models;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -15,6 +17,8 @@ import java.util.List;
  */
 
 public class Timeline {
+
+    Long id;
 
     @SerializedName("user")
     private User user;
@@ -58,6 +62,30 @@ public class Timeline {
         this.createdAt = createdAt;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Timeline getFromJsonObject(org.json.JSONObject jsonObject){
+        Timeline timeline =null;
+        try {
+            Gson gson = new GsonBuilder().create();
+            JsonParser parser = new JsonParser();
+            JsonObject timelineObj = parser.parse(jsonObject.toString()).getAsJsonObject();
+
+            timeline =  gson.fromJson(timelineObj, Timeline.class);
+            timeline.setWholeResponse(timeline.toString());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return timeline;
+    }
+
     public List<Timeline> getFromJsonArray(JSONArray timelinesJsonArray){
 
         try{
@@ -85,6 +113,7 @@ public class Timeline {
     @Override
     public String toString() {
         return "Timeline{" +
+                "id=" + id +
                 "user=" + user +
                 ", text='" + text + '\'' +
                 ", createdAt='" + createdAt + '\'' +

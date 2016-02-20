@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.anuj.twitter.R;
@@ -31,7 +32,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.apache.http.Header;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -46,6 +49,8 @@ public class TwitterActivity extends AppCompatActivity {
     @Bind(R.id.rvTimeline)
     public RecyclerView timeLineRecycleView;
 
+    LinearLayoutManager linearLayoutManager;
+
     List<Timeline> timelines;
 
     TwitterTimelineAdapter twitterTimelineAdapter;
@@ -53,6 +58,9 @@ public class TwitterActivity extends AppCompatActivity {
 
     private int sinceId = 0;
 
+    // based on the twitter doc send the first time null and subsequent the last one
+    // https://dev.twitter.com/rest/public/timelines
+    Long max_id = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +81,8 @@ public class TwitterActivity extends AppCompatActivity {
         setupTheTimelineAdapter();
         //attach the adapter to the listView
         //call the api and populate the timline
-        populateTimeline(1);
+        //remember the first time is maxID is null
+        populateTimeline(1, max_id);
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -81,9 +90,8 @@ public class TwitterActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
+
+                //TODO: try to get the new tweets and append on the top don't know how to do till now
                 Toast.makeText(getApplicationContext(), "SWIPE", Toast.LENGTH_SHORT).show();
             }
         });
@@ -94,11 +102,11 @@ public class TwitterActivity extends AppCompatActivity {
         // set properties of recycler
         timeLineRecycleView.setHasFixedSize(true);
 
-        LinearLayoutManager linearLayoutManager =
+        linearLayoutManager =
                 new LinearLayoutManager(this);
         timeLineRecycleView.setLayoutManager(linearLayoutManager);
 
-        timelines = new ArrayList<>();
+        timelines = new LinkedList<>();
         twitterTimelineAdapter = new TwitterTimelineAdapter(timelines);
 
 
@@ -107,13 +115,12 @@ public class TwitterActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(int pageList, int totalItemsCount) {
 
-                Log.i("INFO","totalItemsCount="+totalItemsCount);
+                Log.i("INFO", "totalItemsCount=" + totalItemsCount);
                 if (sinceId != pageList) {
-                    Log.i("INFO","sinceId="+sinceId);
+                    Log.i("INFO", "sinceId=" + sinceId);
                     Log.i("INFO", "pageList=" + pageList);
-                    populateTimeline(++pageList);
-                }
-                else{
+                    populateTimeline(++pageList, max_id);
+                } else {
                     Log.e("ERROR", "sinceId=" + sinceId);
                     Log.e("ERROR", "pageList=" + pageList);
                 }
@@ -130,7 +137,11 @@ public class TwitterActivity extends AppCompatActivity {
         twitterToolBar.setBackgroundColor(getResources().getColor(R.color.blue));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-    private void populateTimeline(int sinceId){
+    /*
+    https://api.twitter.com/1.1/statuses/update.json?status=Maybe%20he%27ll%20finally%20find%20his%20keys.%20%23peterfalk
+
+     */
+    private void populateTimeline(int sinceId, final Long maxId){
 
         twitterClient.getUserTimeLine(new JsonHttpResponseHandler() {
 
@@ -141,8 +152,22 @@ public class TwitterActivity extends AppCompatActivity {
                 List<Timeline> timelineList = timeline.getFromJsonArray(response);
                 if (timelineList != null && !timelineList.isEmpty()) {
                     Log.i("INFO", "timelines= " + timelineList.toString());
-                    timelines.addAll(timelineList);
-                    //give to our adapter
+                    //if maxId is null i.e the first time we call add all the result to the list
+                    if (maxId == null) {
+                        max_id  = timelineList.get(timelineList.size()-1).getId();
+                        Log.i("INFO", "First Time going to set the max_id="+max_id);
+                        timelines.addAll(timelineList);
+
+                    } else {
+
+                        Log.i("INFO", "Subsequent ime going to set the max_id="+max_id);
+
+                        // remove the first element as it's going to be duplicate based on
+                        // the twitter doc
+                        timelineList.remove(0);
+                        max_id  = timelineList.get(timelineList.size()-1).getId();
+                        timelines.addAll(timelineList);
+                    }
 
                     //save the table
                     saveToDB(timelineList);
@@ -161,7 +186,7 @@ public class TwitterActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 throwable.printStackTrace();
             }
-        }, sinceId);
+        }, sinceId, max_id);
     }
 
     @Override
@@ -200,12 +225,40 @@ public class TwitterActivity extends AppCompatActivity {
 
                 // got the value from the dialog
                 // put in the list view and refresh the adapter
-
-                Log.i("INFO", "@@@@@@@@@@@@@@@@@@@@ "+text);
+                // populate the listview if the text is not empty
+                if(text!=null && !text.isEmpty()){
+                    postTheUserTweetOnTheList(text);
+                }
 
             }
         });
         newFragment.show(ft, "TWEET_DIALOG");
+    }
+
+    private void postTheUserTweetOnTheList(String tweet){
+        twitterClient.postTweet(new JsonHttpResponseHandler(){
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Timeline timeline = new Timeline();
+                timeline = timeline.getFromJsonObject(response);
+
+                //insert item on the top of the list
+                timelines.add(0, timeline);
+                twitterTimelineAdapter.notifyItemInserted(0);
+
+                //scroll to the top when the item is added
+                linearLayoutManager.scrollToPosition(0);
+                Log.i("INFO", timeline.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.e("ERROR", errorResponse.toString());
+                throwable.printStackTrace();
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        }, tweet);
     }
 
     private void saveToDB(List<Timeline> timelines){

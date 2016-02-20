@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/rlTweet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/etTweet"
+        android:background="@android:color/transparent"
+        android:layout_above="@+id/tvCharCount"
+        android:gravity="top|left"
+        android:maxLength="10"
+        android:fontFamily="sans-serif-light"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tweet"
+        android:id="@+id/btnTweet"
+        android:background="@color/blue"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/tvCharCount"
+        android:layout_above="@+id/btnTweet" />
+
+</RelativeLayout>

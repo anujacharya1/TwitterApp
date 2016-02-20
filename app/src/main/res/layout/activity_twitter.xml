@@ -11,14 +11,15 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/my_toolbar">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvTimeline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFFFFF"
-            android:layout_below="@+id/my_toolbar" />
+             />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
