@@ -8,7 +8,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
-import org.scribe.builder.api.FlickrApi;
 import org.scribe.builder.api.TwitterApi;
 
 /*
@@ -36,12 +35,12 @@ public class TwitterClient extends OAuthBaseClient {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	public void getUserTimeLine(AsyncHttpResponseHandler handler){
+	public void getUserTimeLine(AsyncHttpResponseHandler handler, Integer sinceId){
 
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 
 		RequestParams params = new RequestParams();
-		params.put("since_id", 1);
+		params.put("since_id", sinceId);
 		params.put("count", 25);
 		Log.i("INFO", "apiUrl==" + apiUrl);
 		Log.i("INFO", "params==" + params);

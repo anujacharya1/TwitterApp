@@ -1,9 +1,6 @@
 package com.anuj.twitter.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -93,7 +90,6 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
     }
 
     public static Date getTwitterDate(String date) {
-//Thu Dec 23 18:26:07 +0000 2010
         SimpleDateFormat sf = new SimpleDateFormat(TWITTER_TIME_FORMAT);
         sf.setLenient(true);
         Date twitterDate = null;
