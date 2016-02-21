@@ -24,12 +24,12 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-//apply plugin: 'com.neenbedankt.android-apt'
-//
-//dependencies {
-//    compile 'org.parceler:parceler-api:1.0.4'
-//    apt 'org.parceler:parceler:1.0.4'
-//}
+apply plugin: 'com.neenbedankt.android-apt'
+
+dependencies {
+    compile 'org.parceler:parceler-api:1.0.4'
+    apt 'org.parceler:parceler:1.0.4'
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

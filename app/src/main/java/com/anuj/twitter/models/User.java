@@ -2,9 +2,12 @@ package com.anuj.twitter.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Created by anujacharya on 2/15/16.
  */
+@Parcel
 public class User {
 
     Long id;

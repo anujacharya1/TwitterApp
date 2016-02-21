@@ -1,5 +1,7 @@
 package com.anuj.twitter.activities;
 
+import android.content.Intent;
+import android.os.Parcel;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -33,6 +35,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.apache.http.Header;
+import org.parceler.Parcels;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -115,7 +118,11 @@ public class TwitterActivity extends AppCompatActivity {
         twitterTimelineAdapter.setOnItemClickListener(new TwitterTimelineAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("INFO", "@@@@@@@@@@@@@@@@@@@@@@@@"+position);
+                Timeline timeline = timelines.get(position);
+
+                Intent i = new Intent(TwitterActivity.this, TweetDetailActivity.class);
+                i.putExtra("timeline", Parcels.wrap(timeline));
+                startActivity(i);
             }
         });
 

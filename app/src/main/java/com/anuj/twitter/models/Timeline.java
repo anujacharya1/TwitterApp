@@ -9,6 +9,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
  * Created by anujacharya on 2/13/16.
  */
 
+@Parcel
 public class Timeline {
 
     Long id;

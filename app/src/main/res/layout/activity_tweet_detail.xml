@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#f0f8ff"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:id="@+id/detail_toolbar">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/twitter_logo"/>
+    </android.support.v7.widget.Toolbar>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/detail_toolbar">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/ivDetailProfilePic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:id="@+id/tvDetailUsername"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/ivDetailProfilePic"
+            android:layout_toEndOf="@+id/ivDetailProfilePic"
+            android:fontFamily="sans-serif-light"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="detailTweet"
+            android:id="@+id/tvDeatilTweet"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/ivDetailProfilePic"
+            android:fontFamily="sans-serif-light"
+            android:autoLink="all"
+            android:linksClickable="true"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="screen_name"
+            android:id="@+id/tvDetailScreenName"
+            android:fontFamily="sans-serif-light"
+            android:layout_below="@+id/tvDetailUsername"
+            android:layout_toRightOf="@+id/ivDetailProfilePic"
+            android:layout_toEndOf="@+id/ivDetailProfilePic" />
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+
