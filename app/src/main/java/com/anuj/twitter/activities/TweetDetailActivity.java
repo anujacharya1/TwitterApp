@@ -54,8 +54,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         twitterToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(TweetDetailActivity.this, TwitterActivity.class);
-                startActivity(i);
+                finish();
             }
         });
 
