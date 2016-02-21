@@ -84,6 +84,18 @@ public class TwitterActivity extends AppCompatActivity {
         Log.i("INFO", "token=" + twitterClient.checkAccessToken().getToken());
 
         setupTheTimelineAdapter();
+
+        // get the cached timeline
+        List<TimelineDO> cachedTimeLine = DBHelper.getAllInDescOfDate();
+        if(cachedTimeLine!=null && !cachedTimeLine.isEmpty()){
+           populateTheContentFromCachedDatabse(cachedTimeLine);
+        }
+
+        //Step1: try to get the data from database
+
+
+
+
         //attach the adapter to the listView
         //call the api and populate the timline
         //remember the first time is maxID is null
@@ -96,17 +108,45 @@ public class TwitterActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-                // clear the list
-                // get the data from the Twitter and merge to database
-                // and start getting from the database
-                // TODO: problem is sql is not removing the duplicates
-
-                //TODO: try to get the new tweets and append on the top don't know how to do till now
-                Toast.makeText(getApplicationContext(), "SWIPE", Toast.LENGTH_SHORT).show();
+                //set the maxId to zero
+                max_id = null;
+                timelines.clear(); //clear list
+                twitterTimelineAdapter.notifyDataSetChanged();
+                populateTimeline(1, max_id);
             }
         });
     }
 
+    private void populateTheContentFromCachedDatabse(List<TimelineDO> cachedTimeLine){
+
+        Log.i("INFO", "+++++++++++GOING TO GET THE CACHED ENTRIES+++++++++++");
+        // if there are entries cached in the database get it from there
+        // and then populate more based on the last id cached in the database
+        // so the user can progress faster
+
+        // for people to get the latest let them refresh layout
+
+        // timelines will be zero just convert TimelineDO to Timeline and poulate the adapter
+        for(TimelineDO timelineDO : cachedTimeLine){
+            UserDO userDO = timelineDO.getUser();
+            Timeline timeline = new Timeline();
+            timeline.setCreatedAt(timelineDO.getCreatedAtFromTwitter());
+            timeline.setText(timelineDO.getText());
+
+            User user = new User();
+            user.setScreenName(userDO.getScreenName());
+            user.setName(userDO.getName());
+            user.setProfileImg(userDO.getProfileImg());
+            timeline.setUser(user);
+
+            timelines.add(timeline);
+        }
+
+        int curSize = twitterTimelineAdapter.getItemCount();
+        twitterTimelineAdapter.notifyItemRangeInserted(curSize, timelines.size() - 1);
+
+
+    }
     private void setupTheTimelineAdapter(){
 
         // set properties of recycler
@@ -156,10 +196,7 @@ public class TwitterActivity extends AppCompatActivity {
         twitterToolBar.setBackgroundColor(getResources().getColor(R.color.blue));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-    /*
-    https://api.twitter.com/1.1/statuses/update.json?status=Maybe%20he%27ll%20finally%20find%20his%20keys.%20%23peterfalk
 
-     */
     private void populateTimeline(int sinceId, final Long maxId){
 
         twitterClient.getUserTimeLine(new JsonHttpResponseHandler() {
@@ -195,17 +232,10 @@ public class TwitterActivity extends AppCompatActivity {
                     List<TimelineDO> timelineDOs = DBHelper.getAllInDescOfDate();
                     Log.i("INFO", "Stored in database count = "+timelineDOs.size());
 
-                    Log.i("INFO", "________________________________");
-                    for (TimelineDO timelineDO : timelineDOs) {
-
-                        Log.i("INFO",  timelineDO.toString());
-                    }
-                    Log.i("INFO", "________________________________");
-
-
                     int curSize = twitterTimelineAdapter.getItemCount();
                     twitterTimelineAdapter.notifyItemRangeInserted(curSize, timelines.size() - 1);
 
+                    swipeContainer.setRefreshing(false);
                 } else {
                     Log.e("ERROR", "Did not got data from twitter API");
                 }
@@ -216,6 +246,7 @@ public class TwitterActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 throwable.printStackTrace();
+                Log.e("ERROR", "GOT THE ERROR FROM THE TWITTER");
             }
         }, sinceId, max_id);
     }

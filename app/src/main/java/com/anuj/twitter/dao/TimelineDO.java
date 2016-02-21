@@ -30,7 +30,7 @@ public class TimelineDO extends Model{
     static final String TWITTER_TIME_FORMAT="EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    @Column(name = "_id", index = true)
+    @Column(name = "_id", index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private Long _id;
 
     @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
@@ -42,6 +42,10 @@ public class TimelineDO extends Model{
     @Column(name = "created_at")
     private Date createdAt;
 
+    // this is to store the twitter format date
+    @Column(name = "created_at_twitter_date")
+    private String createdAtFromTwitter;
+
     public  TimelineDO(){
     }
 
@@ -50,9 +54,9 @@ public class TimelineDO extends Model{
         this._id = id;
         this.user = user;
         this.text = text;
+        this.createdAtFromTwitter = createdAt;
         setDateFromString(createdAt);
     }
-
 
     public UserDO getUser() {
         return user;
@@ -89,6 +93,13 @@ public class TimelineDO extends Model{
         this._id = _id;
     }
 
+    public String getCreatedAtFromTwitter() {
+        return createdAtFromTwitter;
+    }
+
+    public void setCreatedAtFromTwitter(String createdAtFromTwitter) {
+        this.createdAtFromTwitter = createdAtFromTwitter;
+    }
 
     public void setDateFromString(String date) {
         SimpleDateFormat sf = new SimpleDateFormat(TWITTER_TIME_FORMAT);
