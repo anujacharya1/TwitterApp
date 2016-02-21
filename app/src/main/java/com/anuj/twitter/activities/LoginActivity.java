@@ -10,7 +10,6 @@ import com.anuj.twitter.R;
 import com.anuj.twitter.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
-
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	@Override
@@ -18,7 +17,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 	}
-
 
 	// Inflate the menu; this adds items to the action bar if it is present.
 	@Override

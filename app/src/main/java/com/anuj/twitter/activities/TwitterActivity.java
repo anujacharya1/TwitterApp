@@ -96,6 +96,11 @@ public class TwitterActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
+                // clear the list
+                // get the data from the Twitter and merge to database
+                // and start getting from the database
+                // TODO: problem is sql is not removing the duplicates
+
                 //TODO: try to get the new tweets and append on the top don't know how to do till now
                 Toast.makeText(getApplicationContext(), "SWIPE", Toast.LENGTH_SHORT).show();
             }
@@ -107,13 +112,11 @@ public class TwitterActivity extends AppCompatActivity {
         // set properties of recycler
         timeLineRecycleView.setHasFixedSize(true);
 
-        linearLayoutManager =
-                new LinearLayoutManager(this);
+        linearLayoutManager = new LinearLayoutManager(this);
         timeLineRecycleView.setLayoutManager(linearLayoutManager);
 
         timelines = new LinkedList<>();
         twitterTimelineAdapter = new TwitterTimelineAdapter(timelines);
-
 
         twitterTimelineAdapter.setOnItemClickListener(new TwitterTimelineAdapter.OnItemClickListener() {
             @Override

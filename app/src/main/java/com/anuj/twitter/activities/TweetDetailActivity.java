@@ -37,15 +37,14 @@ public class TweetDetailActivity extends AppCompatActivity {
     TextView tvDetailUsername;
     TextView tvDeatilTweet;
     TextView tvDetailScreenName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-
         Timeline timeline = Parcels.unwrap(getIntent().getParcelableExtra("timeline"));
         setContentView(R.layout.activity_tweet_detail);
-
 
         Toolbar twitterToolBar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(twitterToolBar);
@@ -80,9 +79,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         //profile image
         Glide.with(this)
                 .load(user.getProfileImg())
-                .into(ivDetailProfilePic)
-        ;
-        Log.i("INFO", "@@@@@@@@@@@@@@@@@@@@@@@@" + timeline.toString());
+                .into(ivDetailProfilePic);
     }
 
 
