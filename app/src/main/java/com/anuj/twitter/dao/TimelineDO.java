@@ -15,7 +15,10 @@ import com.google.gson.annotations.SerializedName;
 import org.json.JSONArray;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +26,11 @@ import java.util.List;
  */
 @Table(name = "Timeline")
 public class TimelineDO extends Model{
-    @Column(name = "_id",  index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+
+    static final String TWITTER_TIME_FORMAT="EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+
+
+    @Column(name = "_id", index = true)
     private Long _id;
 
     @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
@@ -33,7 +40,7 @@ public class TimelineDO extends Model{
     private String text;
 
     @Column(name = "created_at")
-    private String createdAt;
+    private Date createdAt;
 
     public  TimelineDO(){
     }
@@ -43,7 +50,7 @@ public class TimelineDO extends Model{
         this._id = id;
         this.user = user;
         this.text = text;
-        this.createdAt = createdAt;
+        setDateFromString(createdAt);
     }
 
 
@@ -63,11 +70,11 @@ public class TimelineDO extends Model{
         this.text = text;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
     public static TimelineDO getRandom() {
@@ -80,6 +87,18 @@ public class TimelineDO extends Model{
 
     public void set_id(Long _id) {
         this._id = _id;
+    }
+
+
+    public void setDateFromString(String date) {
+        SimpleDateFormat sf = new SimpleDateFormat(TWITTER_TIME_FORMAT);
+        sf.setLenient(true);
+        try {
+            //set here the date format
+            this.setCreatedAt(sf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

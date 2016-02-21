@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.anuj.twitter.DBHelper;
 import com.anuj.twitter.R;
 import com.anuj.twitter.TwitterApplication;
 import com.anuj.twitter.TwitterClient;
@@ -111,6 +112,13 @@ public class TwitterActivity extends AppCompatActivity {
         twitterTimelineAdapter = new TwitterTimelineAdapter(timelines);
 
 
+        twitterTimelineAdapter.setOnItemClickListener(new TwitterTimelineAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.i("INFO", "@@@@@@@@@@@@@@@@@@@@@@@@"+position);
+            }
+        });
+
         //end less scroller
         timeLineRecycleView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -155,23 +163,35 @@ public class TwitterActivity extends AppCompatActivity {
                     Log.i("INFO", "timelines= " + timelineList.toString());
                     //if maxId is null i.e the first time we call add all the result to the list
                     if (maxId == null) {
-                        max_id  = timelineList.get(timelineList.size()-1).getId();
-                        Log.i("INFO", "First Time going to set the max_id="+max_id);
+                        max_id = timelineList.get(timelineList.size() - 1).getId();
+                        Log.i("INFO", "First Time going to set the max_id=" + max_id);
                         timelines.addAll(timelineList);
+                        Log.i("INFO", "Got from twitter API count = " + timelines.size());
 
                     } else {
 
-                        Log.i("INFO", "Subsequent ime going to set the max_id="+max_id);
+                        Log.i("INFO", "Subsequent ime going to set the max_id=" + max_id);
 
                         // remove the first element as it's going to be duplicate based on
                         // the twitter doc
                         timelineList.remove(0);
-                        max_id  = timelineList.get(timelineList.size()-1).getId();
+                        max_id = timelineList.get(timelineList.size() - 1).getId();
                         timelines.addAll(timelineList);
                     }
 
                     //save the table
                     saveToDB(timelineList);
+
+                    List<TimelineDO> timelineDOs = DBHelper.getAllInDescOfDate();
+                    Log.i("INFO", "Stored in database count = "+timelineDOs.size());
+
+                    Log.i("INFO", "________________________________");
+                    for (TimelineDO timelineDO : timelineDOs) {
+
+                        Log.i("INFO",  timelineDO.toString());
+                    }
+                    Log.i("INFO", "________________________________");
+
 
                     int curSize = twitterTimelineAdapter.getItemCount();
                     twitterTimelineAdapter.notifyItemRangeInserted(curSize, timelines.size() - 1);
@@ -244,6 +264,9 @@ public class TwitterActivity extends AppCompatActivity {
                 Timeline timeline = new Timeline();
                 timeline = timeline.getFromJsonObject(response);
 
+                //save in table
+                DBHelper.save(timeline);
+
                 //insert item on the top of the list
                 timelines.add(0, timeline);
                 twitterTimelineAdapter.notifyItemInserted(0);
@@ -266,23 +289,14 @@ public class TwitterActivity extends AppCompatActivity {
         ActiveAndroid.beginTransaction();
         try{
             for(Timeline timeline :  timelines){
-
-                User user = timeline.getUser();
-                UserDO userDO = new UserDO(user.getId(), user.getName(), user.getProfileImg(),user.getScreenName() );
-                userDO.save();
-
-                TimelineDO timelineDO = new TimelineDO(timeline.getId(), userDO, timeline.getText(), timeline.getCreatedAt() );
-                timelineDO.save();
-                Log.i("INFO", "Getting random tweet = " + TimelineDO.getRandom());
+                DBHelper.save(timeline);
             }
             ActiveAndroid.setTransactionSuccessful();
         }
         catch (Exception e){
             e.printStackTrace();
-
         }
         finally {
-
             ActiveAndroid.endTransaction();
         }
 

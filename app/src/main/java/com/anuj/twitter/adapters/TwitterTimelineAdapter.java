@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.anuj.twitter.LinkifyTextView;
 import com.anuj.twitter.R;
 import com.anuj.twitter.models.Timeline;
 import com.anuj.twitter.models.User;
@@ -124,8 +125,7 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
 
         @Bind(R.id.usrImg)
         public ImageView userTweetImg;
-        @Bind(R.id.tvTweet)
-        public TextView tweetTxt;
+        public LinkifyTextView tweetTxt;
         @Bind(R.id.tvDate)
         TextView date;
         @Bind(R.id.tvUsername)
@@ -133,6 +133,8 @@ public class TwitterTimelineAdapter extends RecyclerView.Adapter<TwitterTimeline
 
         public ViewHolder(final View itemView) {
             super(itemView);
+
+            tweetTxt = (LinkifyTextView) itemView.findViewById(R.id.tvTweet);
 
             // bind the item view
             ButterKnife.bind(this, itemView);

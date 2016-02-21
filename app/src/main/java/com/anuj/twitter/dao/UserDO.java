@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table(name = "User")
 public class UserDO extends Model {
 
-    @Column(name = "_id",  index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "_id", index =true)
     private Long _id;
 
     @Column(name = "name")

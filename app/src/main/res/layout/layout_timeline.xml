@@ -20,7 +20,7 @@
         android:scaleType="fitStart"
         />
 
-    <TextView
+    <com.anuj.twitter.LinkifyTextView
         android:layout_width="match_parent"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -33,6 +33,8 @@
         android:layout_below="@+id/tvUsername"
         android:background="#FFFFFF"
         android:fontFamily="sans-serif-light"
+        android:autoLink="all"
+        android:linksClickable="true"
         android:layout_alignBottom="@+id/usrImg" />
 
     <TextView
