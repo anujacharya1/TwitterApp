@@ -12,7 +12,7 @@
         android:background="@android:color/transparent"
         android:layout_above="@+id/tvCharCount"
         android:gravity="top|left"
-        android:maxLength="10"
+        android:maxLength="140"
         android:fontFamily="sans-serif-light"
         />
 

@@ -25,8 +25,6 @@ public class DBHelper {
         timelineDO.save();
     }
 
-
-
     public static List<TimelineDO> getAllInDescOfDate(){
         return new Select().all()
                 .from(TimelineDO.class)
